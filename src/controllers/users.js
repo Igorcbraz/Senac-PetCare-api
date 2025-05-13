@@ -6,7 +6,6 @@ const createUser = async (req, res) => {
   const { name, email, password, role, status } = req.body
 
   try {
-    console.log(password)
     const hashedPassword = await bcrypt.hash(password, 10)
 
     const newUser = await User.create({
@@ -28,7 +27,9 @@ const loginUser = async (req, res) => {
   const { email, password } = req.body
 
   try {
-    const user = await User.findOne({ where: { email } })
+    const user = await User.findOne({
+      where: { email }
+    })
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' })
@@ -42,9 +43,13 @@ const loginUser = async (req, res) => {
 
     const token = generateToken(user)
 
+    const userWithoutPassword = { ...user.toJSON() }
+    delete userWithoutPassword.password
+
     return res.status(200).json({
       message: 'Login successful',
       token,
+      user: userWithoutPassword
     })
   } catch (error) {
     console.error(error)
