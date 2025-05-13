@@ -6,6 +6,7 @@ const authenticateToken = expressjwt({
 }).unless({
   path: [
     { url: '/', methods: ['GET'] },
+    { url: '/health', methods: ['GET'] },
     { url: '/api/users/login', methods: ['POST'] },
     { url: '/api/users', methods: ['POST'] },
   ]
