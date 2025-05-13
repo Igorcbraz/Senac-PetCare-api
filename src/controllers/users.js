@@ -1,4 +1,4 @@
-const { User } = require('../models')
+const { User, Pet } = require('../models')
 const bcrypt = require('bcryptjs')
 const { generateToken } = require('../services/authService')
 
@@ -28,7 +28,11 @@ const loginUser = async (req, res) => {
 
   try {
     const user = await User.findOne({
-      where: { email }
+      where: { email },
+      include: [{
+        model: Pet,
+        as: 'pets',
+      }]
     })
 
     if (!user) {
